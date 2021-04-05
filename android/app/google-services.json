@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1003264591002",
+    "project_id": "lorn-sled",
+    "storage_bucket": "lorn-sled.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1003264591002:android:b8aa7bd51b9e5f306e8b23",
+        "android_client_info": {
+          "package_name": "com.example.loren"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1003264591002-0ck4ltjkl9oolmetkl4rnrlkigodltlu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhQZB0OGMWxmXaFOvaWDQXizANMaGMBuc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1003264591002-0ck4ltjkl9oolmetkl4rnrlkigodltlu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
