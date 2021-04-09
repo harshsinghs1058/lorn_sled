@@ -23,10 +23,7 @@ class _HomePageState extends State<HomePage> {
               snapshot.data.docs.toList().length == 0) {
             print("no data");
             return Center(
-              child: Text(
-                "Empty",
-                style: TextStyle(fontSize: 40),
-              ),
+              child: CircularProgressIndicator(),
             );
           } else {
             return ListView(
@@ -39,109 +36,124 @@ class _HomePageState extends State<HomePage> {
                   var discount = document["discount"];
                   return Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-                    child: InkWell(
-                      splashColor: Colors.green,
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
+                    child: Column(
+                      children: [
+                        InkWell(
+                          splashColor: Colors.green,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
                                 builder: (context) => Center(
-                                      child: ItemView(
-                                        description: json
-                                            .decode(document["description"]),
-                                        discount: discount,
-                                        name: name,
-                                        rating: document["rating"],
-                                        mrp: mrp,
-                                        sCost: cost, image: images,
-                                      ),
-                                    )));
-                      },
-                      child: Container(
-                        padding: EdgeInsets.all(10),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Container(
-                              height: 100,
-                              width: 100,
-                              decoration: BoxDecoration(
-                                border:
-                                    Border.all(color: Colors.black, width: 2),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              padding: EdgeInsets.all(5),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.network(images[0],
-                                    errorBuilder: (context, error, stackTrace) {
-                                  print(error);
-                                  return Center(
-                                    child: Text("Image unavilable"),
-                                  );
-                                }),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Container(
-                              height: 100,
-                              width: MediaQuery.of(context).size.width - 180,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    name,
-                                    maxLines: 2,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1
-                                        .copyWith(
-                                            fontSize: 20, color: Colors.black),
+                                  child: ItemView(
+                                    description:
+                                        json.decode(document["description"]),
+                                    discount: discount,
+                                    name: name,
+                                    rating: document["rating"],
+                                    mrp: mrp,
+                                    sCost: cost,
+                                    image: images,
                                   ),
-                                  Text(
-                                    "Rs. " + cost.toString(),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1
-                                        .copyWith(
-                                          fontSize: 20,
-                                          color: Colors.black,
-                                        ),
+                                ),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(10),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Container(
+                                  height: 100,
+                                  width: 100,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Colors.black, width: 2),
+                                    borderRadius: BorderRadius.circular(12),
                                   ),
-                                  RichText(
-                                    text: TextSpan(
-                                      text: "Rs. " + mrp.toString(),
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black,
-                                        decoration: TextDecoration.lineThrough,
+                                  padding: EdgeInsets.all(5),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.network(images[0],
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
+                                      print(error);
+                                      return Center(
+                                        child: Text("Image unavilable"),
+                                      );
+                                    }),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Container(
+                                  height: 100,
+                                  width:
+                                      MediaQuery.of(context).size.width - 180,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        name,
+                                        maxLines: 2,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            .copyWith(
+                                                fontSize: 18,
+                                                color: Colors.black),
                                       ),
-                                      children: [
-                                        TextSpan(
-                                          text: "  " +
-                                              discount.toString() +
-                                              "% off",
+                                      Text(
+                                        "Rs. " + cost.toString(),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            .copyWith(
+                                              fontSize: 18,
+                                              color: Colors.redAccent,
+                                            ),
+                                      ),
+                                      RichText(
+                                        text: TextSpan(
+                                          text: "Rs. " + mrp.toString(),
                                           style: TextStyle(
-                                            decoration: TextDecoration.none,
-                                            color: Colors.green[600],
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w600,
+                                            fontSize: 16,
+                                            color: Colors.black,
+                                            decoration:
+                                                TextDecoration.lineThrough,
                                           ),
+                                          children: [
+                                            TextSpan(
+                                              text: "  " +
+                                                  discount.toString() +
+                                                  "% off",
+                                              style: TextStyle(
+                                                decoration: TextDecoration.none,
+                                                color: Colors.green[600],
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
-                      ),
+                        Divider(
+                          thickness: 2,
+                        ),
+                      ],
                     ),
                   );
                 },

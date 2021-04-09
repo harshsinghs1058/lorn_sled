@@ -3,7 +3,7 @@ import 'package:lorn_sled/constants/sizeConfigure.dart';
 
 // ignore: must_be_immutable
 class ItemImageView extends StatefulWidget {
-  final List<String> itemImages;
+  final List itemImages;
   final String rating;
   int idx;
   ItemImageView(
@@ -68,7 +68,7 @@ class _ItemImageViewState extends State<ItemImageView> {
         panEnabled: false,
         child: Center(
           child: ClipRRect(
-            child: Image.asset(
+            child: Image.network(
               widget.itemImages[widget.idx],
             ),
           ),
@@ -102,8 +102,11 @@ class _ItemImageViewState extends State<ItemImageView> {
             },
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: Image.asset(
-                widget.itemImages[index],
+              child: SizedBox(
+                width: getProportionateScreenHeight(80),
+                child: Image.network(
+                  widget.itemImages[index],
+                ),
               ),
             ),
           ),
