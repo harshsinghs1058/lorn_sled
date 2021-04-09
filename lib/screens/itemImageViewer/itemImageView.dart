@@ -4,7 +4,7 @@ import 'package:lorn_sled/constants/sizeConfigure.dart';
 // ignore: must_be_immutable
 class ItemImageView extends StatefulWidget {
   final List<String> itemImages;
-  final double rating;
+  final String rating;
   int idx;
   ItemImageView(
       {@required this.itemImages, @required this.rating, @required this.idx});
@@ -40,7 +40,7 @@ class _ItemImageViewState extends State<ItemImageView> {
       actions: [
         Center(
           child: Text(
-            widget.rating.toString() + "  ",
+            (widget.rating == "null" ? 0 : widget.rating).toString() + "  ",
             style: TextStyle(fontSize: 20),
           ),
         ),

@@ -12,7 +12,7 @@ class _BodyState extends State<Body> {
   Widget build(BuildContext context) {
     return Container(
       child: ListView.builder(
-        itemCount: 10 * 2 + 1, //n * 2 + 1 here n is number of itemsCount
+        itemCount: 1 * 2 + 1, //n * 2 + 1 here n is number of itemsCount
         itemBuilder: (context, index) => index.isEven
             ? Divider(
                 height: 0,

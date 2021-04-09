@@ -30,7 +30,7 @@ class _CartPageState extends State<CartPage> {
               width: MediaQuery.of(context).size.width / 2,
               child: Center(
                 child: Text(
-                  "Total Rs. 455",
+                  "Total Rs. 35999",
                   style: Theme.of(context).textTheme.bodyText1.copyWith(
                         fontSize: 22,
                       ),

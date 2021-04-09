@@ -30,6 +30,27 @@
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
+  
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-app.js"></script>
+  
+  <!-- TODO: Add SDKs for Firebase products that you want to use
+    https://firebase.google.com/docs/web/setup#available-libraries -->
+    
+  <script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyCyVDzg2oL0DvHAKjTBHO5CwQWEyyYYB4Q",
+    authDomain: "lorn-sled.firebaseapp.com",
+    projectId: "lorn-sled",
+    storageBucket: "lorn-sled.appspot.com",
+    messagingSenderId: "1003264591002",
+    appId: "1:1003264591002:web:6a991c74a5c3aa5d6e8b23"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  </script>
+  <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-firestore.js"></script>
   <!-- This script installs service_worker.js to provide PWA functionality to
        application. For more information, see:
        https://developers.google.com/web/fundamentals/primers/service-workers -->

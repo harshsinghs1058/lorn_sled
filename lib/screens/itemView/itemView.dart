@@ -3,35 +3,26 @@ import 'package:lorn_sled/constants/sizeConfigure.dart';
 import 'package:lorn_sled/screens/itemImageViewer/itemImageView.dart';
 
 //imported variables
-List<String> _itemImages = [
-  "images/item1.jpg",
-  "images/item2.jpg",
-  "images/item3.jpg",
-  "images/item4.jpg",
-  "images/item5.jpg",
-  "images/item6.jpg",
-];
-List<String> _description = [
-  "Rear Quad Camera with 48 MP Sony IMX586 Sensor, 16 MP Ultra Wide Angle, 5 MP macro lens and 2 MP monochrome lens | Front Camera with 16 MP Sony IMX471 Sensor",
-  "6.55 inch ( 16.63 centimeters) 120 Hz Fluid AMOLED Display with 2400 X 1080 Pixels resolution, 402 PPI density",
-
-  "2.86 GHz Qualcomm Snapdragon 865 Octa-core Processor + Adreno 650 GPU , Oxygen OS based on Android 11 Operating system",
-  "12 GB RAM | 256 GB ROM",
-  "4500 mAH Lithium-ion battery with 65 W “Warp charge”",
-  "1 year Manufacturer warranty for Device, Battery and in-box Accessories from the date of purchase",
-  "Box also includes: OnePlus 8T,Warp Charge 65 Power Adapter, Warp Charge Type-C to Type-C Cable, Quick Start Guide, Welcome Letter, Safety Information and Warranty Card, LOGO Sticker, Case, Screen Protector, SIM Tray Ejector",
-
-  // Important features: Face Unlock, HDR, Screen Flash, Face Retouching, CINE Aspect Ratio Video Recording, Video Portrait, UltraShot HDR, Nightscape, Macro, Portrait, Pro Mode, Panorama, Smart Pet Capture, AI Scene Detection, RAW Image, Filter, Video Focus Tracking, Super Stable, Video Nightscape, Dual Stereo Speakers, Noise cancellation support, Dolby Atmos
-  // supports Alexa Hands-Free. Alexa on your phone lets you make phone calls, open apps, control smart home devices, access the library of Alexa skills, and more using just your voice while on-the-go. Download the Alexa app and complete hands-free setup to get started. Just ask - and Alexa will respond instantly.
-];
-double rating = 5.0;
-int mrp = 40000;
-int sCost = 35999;
-String name = "OnePlus 8T(256GB, 8GB RAM)";
 //program variables
 int _index = 0;
 
 class ItemView extends StatefulWidget {
+  final List description;
+  final List image;
+  final String rating;
+  final int mrp;
+  final int sCost;
+  final String name;
+  final discount;
+  ItemView({
+    @required this.description,
+    @required this.image,
+    @required this.rating,
+    @required this.mrp,
+    @required this.sCost,
+    @required this.name,
+    @required this.discount,
+  });
   @override
   _ItemViewState createState() => _ItemViewState();
 }
@@ -69,31 +60,29 @@ class _ItemViewState extends State<ItemView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            name,
-            style: Theme.of(context).textTheme.headline2,
+            widget.name,
+            style: Theme.of(context).textTheme.headline4,
           ),
           SizedBox(
             height: 10,
           ),
           RichText(
             text: TextSpan(
-              text: "Rs." + sCost.toString() + " ",
+              text: "Rs." + widget.sCost.toString() + " ",
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 26,
               ),
               children: [
                 TextSpan(
-                  text: mrp.toString(),
+                  text: widget.mrp.toString(),
                   style: TextStyle(
                     fontSize: 20,
                     decoration: TextDecoration.lineThrough,
                   ),
                 ),
                 TextSpan(
-                  text: "  " +
-                      (((mrp - sCost) / mrp) * 100).toStringAsFixed(2) +
-                      "% off",
+                  text: "  " + widget.discount.toString() + "% off",
                   style: TextStyle(
                     color: Colors.green[600],
                     fontSize: 20,
@@ -118,7 +107,7 @@ class _ItemViewState extends State<ItemView> {
       child: ListView.builder(
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
-        itemCount: _itemImages.length,
+        itemCount: widget.image.length,
         itemBuilder: (context, index) => Container(
           height: 13,
           width: 13,
@@ -143,7 +132,7 @@ class _ItemViewState extends State<ItemView> {
             },
           );
         },
-        itemCount: _itemImages.length,
+        itemCount: widget.image.length,
         itemBuilder: (context, index) {
           return InkWell(
             onTap: () {
@@ -151,8 +140,8 @@ class _ItemViewState extends State<ItemView> {
                 context,
                 MaterialPageRoute(
                   builder: (_) => ItemImageView(
-                    itemImages: _itemImages,
-                    rating: rating,
+                    itemImages: widget.image,
+                    rating: widget.rating,
                     idx: _index,
                   ),
                 ),
@@ -161,12 +150,11 @@ class _ItemViewState extends State<ItemView> {
             child: Center(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: Image.asset(
-                  _itemImages[index],
+                child: Image.network(
+                  widget.image[index],
                 ),
               ),
             ),
-            // ),
           );
         },
       ),
@@ -188,7 +176,7 @@ class _ItemViewState extends State<ItemView> {
       actions: [
         Center(
           child: Text(
-            rating.toString() + "  ",
+            (widget.rating == "null" ? 0 : widget.rating).toString() + " ",
             style: TextStyle(
               fontSize: 20,
             ),
@@ -248,7 +236,7 @@ class _ItemViewState extends State<ItemView> {
 
   Widget _buildDescription() {
     List<TableRow> _ans = [];
-    for (int i = 0; i < _description.length; i++) {
+    for (int i = 0; i < widget.description.length; i++) {
       _ans.add(
         TableRow(
           children: [
@@ -265,7 +253,7 @@ class _ItemViewState extends State<ItemView> {
                 Container(
                   width: getProportionateScreenWidth(300),
                   child: Text(
-                    _description[i],
+                    widget.description[i].toString(),
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ),
@@ -290,7 +278,7 @@ class _ItemViewState extends State<ItemView> {
         children: [
           Text(
             "Description : ",
-            style: Theme.of(context).textTheme.headline2,
+            style: Theme.of(context).textTheme.headline5,
           ),
           Table(
             children: _ans,

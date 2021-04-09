@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:lorn_sled/services/database.dart';
 
 import '../main.dart';
 
@@ -7,8 +8,9 @@ class Auth {
   //function for create account
   Future signUp(String email, String password) async {
     try {
-      await _auth.createUserWithEmailAndPassword(
+      var x = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
+      DataBase().newUserInitlise(x.user.uid, email);
       return null;
     } catch (e) {
       return e;

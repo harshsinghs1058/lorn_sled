@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:lorn_sled/constants/sizeConfigure.dart';
@@ -12,28 +11,30 @@ class AddProduct extends StatefulWidget {
 }
 
 List<TextEditingController> _productDescription = [];
+List<TextEditingController> _productImage = [];
 int _productDescriptionCount = 0;
-String error = "errer";
-List _productImage = [];
+int _productImageCount = 0;
+String error = "error";
 
 class _AddProductState extends State<AddProduct> {
   final _productMRP = TextEditingController();
   final _productCost = TextEditingController();
   final _productName = TextEditingController();
+  final _productCount = TextEditingController();
   final _formState = GlobalKey<FormState>();
   final myController = TextEditingController();
   final picker = ImagePicker();
-  getImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      final bytes = File(pickedFile.path).readAsBytesSync();
-      _productImage.add(bytes);
-    } else {
-      print('No image selected.');
-      Toast.show("No image selected", context);
-    }
-    setState(() {});
-  }
+  // getImage() async {
+  //   final pickedFile = await picker.getImage(source: ImageSource.gallery);
+  //   if (pickedFile != null) {
+  //     final bytes = File(pickedFile.path).readAsBytesSync();
+  //     _productImage.add(bytes);
+  //   } else {
+  //     print('No image selected.');
+  //     Toast.show("No image selected", context);
+  //   }
+  //   setState(() {});
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -72,12 +73,18 @@ class _AddProductState extends State<AddProduct> {
                   buildTextFormField(
                       _productMRP, " Product MRP", TextInputType.number),
                   ElevatedButton(
-                    onPressed: getImage,
+                    onPressed: () async {
+                      setState(() {
+                        TextEditingController temp = TextEditingController();
+                        _productImage.add(temp);
+                        _productImageCount++;
+                      });
+                    },
                     child: Text(
                       "Add image",
                     ),
                   ),
-                  _buildimages(),
+                  _buildImage(),
                   SizedBox(
                     width: double.infinity,
                     child: Text(
@@ -90,7 +97,7 @@ class _AddProductState extends State<AddProduct> {
                   ElevatedButton(
                     onPressed: () {
                       setState(() {
-                        var temp = TextEditingController();
+                        TextEditingController temp = TextEditingController();
                         _productDescription.add(temp);
                         _productDescriptionCount++;
                       });
@@ -110,8 +117,6 @@ class _AddProductState extends State<AddProduct> {
                             print("product name : " + _productName.text);
                             print("product cost : " + _productCost.text);
                             print("product MRP : " + _productMRP.text);
-                            print(
-                                "product Image : " + _productImage.toString());
                             List<String> _productDescriptionText = [];
                             for (int i = 0;
                                 i < _productDescription.length;
@@ -119,14 +124,22 @@ class _AddProductState extends State<AddProduct> {
                               _productDescriptionText
                                   .add(_productDescription[i].text);
                             }
+                            List<String> _productImageText = [];
+                            for (int i = 0; i < _productImage.length; i++) {
+                              _productImageText.add(_productImage[i].text);
+                            }
                             print("product Desciption : " +
                                 _productDescriptionText.toString());
+                            print("product Image : " +
+                                _productImageText.toString());
                             DataBase().addProductTODataBase(
-                                _productName.text,
-                                int.parse(_productCost.text),
-                                int.parse(_productMRP.text),
-                                _productDescriptionText,
-                                _productImage);
+                              _productName.text,
+                              int.parse(_productCost.text),
+                              int.parse(_productMRP.text),
+                              _productDescriptionText,
+                              _productImageText,
+                              int.parse(_productCount.text),
+                            );
                           } else {
                             Toast.show("MRP can't be less than cost", context);
                           }
@@ -158,36 +171,36 @@ class _AddProductState extends State<AddProduct> {
     );
   }
 
-  Container _buildimages() {
-    return Container(
-      height: getProportionateScreenWidth(350),
-      child: PageView.builder(
-        itemCount: _productImage.toString() == "[]" ? 1 : _productImage.length,
-        itemBuilder: (context, index) {
-          if (index == 0 && _productImage.toString() == "[]") {
-            return Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.grey.shade400,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Icon(
-                Icons.add_a_photo_outlined,
-                color: Colors.white,
-                size: 100,
-              ),
-            );
-          } else
-            return Center(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.memory(_productImage[index]),
-              ),
-            );
-        },
-      ),
-    );
-  }
+  // Container _buildimages() {
+  //   return Container(
+  //     height: getProportionateScreenWidth(350),
+  //     child: PageView.builder(
+  //       itemCount: _productImage.toString() == "[]" ? 1 : _productImage.length,
+  //       itemBuilder: (context, index) {
+  //         if (index == 0 && _productImage.toString() == "[]") {
+  //           return Container(
+  //             width: double.infinity,
+  //             decoration: BoxDecoration(
+  //               color: Colors.grey.shade400,
+  //               borderRadius: BorderRadius.circular(10),
+  //             ),
+  //             child: Icon(
+  //               Icons.add_a_photo_outlined,
+  //               color: Colors.white,
+  //               size: 100,
+  //             ),
+  //           );
+  //         } else
+  //           return Center(
+  //             child: ClipRRect(
+  //               borderRadius: BorderRadius.circular(10),
+  //               child: Image.memory(_productImage[index]),
+  //             ),
+  //           );
+  //       },
+  //     ),
+  //   );
+  // }
 
   Widget _buildDescription() {
     List<Widget> _temp = [];
@@ -195,6 +208,19 @@ class _AddProductState extends State<AddProduct> {
       _temp.add(
         buildTextFormField(_productDescription[i],
             " Desciption " + (i + 1).toString(), TextInputType.name),
+      );
+    }
+    return Column(
+      children: _temp,
+    );
+  }
+
+  Widget _buildImage() {
+    List<Widget> _temp = [];
+    for (int i = 0; i < _productImageCount; i++) {
+      _temp.add(
+        buildTextFormField(_productImage[i],
+            " Image link " + (i + 1).toString(), TextInputType.name),
       );
     }
     return Column(
