@@ -61,24 +61,25 @@ class _ItemViewState extends State<ItemView> {
         children: [
           Text(
             widget.name,
-            style: Theme.of(context).textTheme.headline4,
+            style: Theme.of(context).textTheme.headline5,
           ),
           SizedBox(
             height: 10,
           ),
           RichText(
             text: TextSpan(
-              text: "Rs." + widget.sCost.toString() + " ",
+              text: "Rs." + widget.sCost.toString() + "  ",
               style: TextStyle(
-                color: Colors.black,
-                fontSize: 26,
+                color: Colors.redAccent,
+                fontSize: 24,
               ),
               children: [
                 TextSpan(
-                  text: widget.mrp.toString(),
+                  text: "Rs. " + widget.mrp.toString(),
                   style: TextStyle(
                     fontSize: 20,
                     decoration: TextDecoration.lineThrough,
+                    color: Colors.black,
                   ),
                 ),
                 TextSpan(
@@ -240,23 +241,35 @@ class _ItemViewState extends State<ItemView> {
       _ans.add(
         TableRow(
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  " " + String.fromCharCode(0x2022) + " ",
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText1
-                      .copyWith(fontSize: 28),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 5.50,
+                        right: 4,
+                      ),
+                      child: CircleAvatar(
+                        maxRadius: 4,
+                        backgroundColor: Colors.black87,
+                      ),
+                    ),
+                    Container(
+                      width: getProportionateScreenWidth(300),
+                      child: Text(
+                        widget.description[i].toString(),
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText1
+                            .copyWith(fontSize: 16),
+                      ),
+                    ),
+                  ],
                 ),
-                Container(
-                  width: getProportionateScreenWidth(300),
-                  child: Text(
-                    widget.description[i].toString(),
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
-                ),
+                Divider(),
               ],
             ),
           ],
@@ -278,8 +291,11 @@ class _ItemViewState extends State<ItemView> {
         children: [
           Text(
             "Description : ",
-            style: Theme.of(context).textTheme.headline5,
+            style: Theme.of(context).textTheme.headline5.copyWith(
+                  color: Colors.amber,
+                ),
           ),
+          Divider(),
           Table(
             children: _ans,
           ),
