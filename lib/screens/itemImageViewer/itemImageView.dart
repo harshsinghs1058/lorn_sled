@@ -6,8 +6,11 @@ class ItemImageView extends StatefulWidget {
   final List itemImages;
   final String rating;
   int idx;
-  ItemImageView(
-      {@required this.itemImages, @required this.rating, @required this.idx});
+  ItemImageView({
+    @required this.itemImages,
+    @required this.rating,
+    @required this.idx,
+  });
   @override
   _ItemImageViewState createState() => _ItemImageViewState();
 }
@@ -66,10 +69,13 @@ class _ItemImageViewState extends State<ItemImageView> {
         maxScale: 10.0,
         minScale: 1.0,
         panEnabled: false,
-        child: Center(
-          child: ClipRRect(
-            child: Image.network(
-              widget.itemImages[widget.idx],
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Center(
+            child: ClipRRect(
+              child: Image.network(
+                widget.itemImages[widget.idx],
+              ),
             ),
           ),
         ),
@@ -88,6 +94,7 @@ class _ItemImageViewState extends State<ItemImageView> {
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) => Container(
           decoration: BoxDecoration(
+            color: Colors.white,
             border: Border.all(color: Colors.black, width: 2),
             borderRadius: BorderRadius.circular(12),
           ),
