@@ -9,7 +9,7 @@ int _index = 0;
 class ItemView extends StatefulWidget {
   final List description;
   final List image;
-  final String rating;
+  final double rating;
   final int mrp;
   final int sCost;
   final String name;
@@ -177,7 +177,7 @@ class _ItemViewState extends State<ItemView> {
       actions: [
         Center(
           child: Text(
-            (widget.rating == "null" ? 0 : widget.rating).toString() + " ",
+            (widget.rating).toString() + " ",
             style: TextStyle(
               fontSize: 20,
             ),

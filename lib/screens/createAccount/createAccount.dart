@@ -214,6 +214,7 @@ class _CreateAccountState extends State<CreateAccount> {
                       print(result.toString());
                       if (Navigator.canPop(context)) Navigator.pop(context);
                       if (result == null) {
+                        print("Account created sussesfully");
                         AwesomeDialog(
                             context: context,
                             dialogType: DialogType.SUCCES,
@@ -221,7 +222,7 @@ class _CreateAccountState extends State<CreateAccount> {
                             desc: "Account created sussesfully",
                             btnOkText: "Sign in",
                             btnOkOnPress: () {
-                              print("hello");
+                              print("Navigating to log in page");
                             },
                             onDissmissCallback: () {
                               Navigator.push(

@@ -2,28 +2,45 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lorn_sled/constants/sizeConfigure.dart';
-import 'package:lorn_sled/screens/home%20page/customAppBar.dart';
 import 'package:lorn_sled/screens/itemView/itemView.dart';
 
-class HomePage extends StatefulWidget {
+class Category extends StatefulWidget {
+  final category;
+
+  const Category({Key key, @required this.category}) : super(key: key);
   @override
-  _HomePageState createState() => _HomePageState();
+  _CategoryState createState() => _CategoryState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _CategoryState extends State<Category> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar: AppBar(
+        title: Text(
+          "Mobiles",
+          style: TextStyle(
+            color: Colors.yellowAccent,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.grey.shade700,
+      ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('products').snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('products')
+            .where("category", isEqualTo: widget.category)
+            .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.data == null ||
-              snapshot.data.docs.toList().length == 0) {
+          if (snapshot.data == null) {
             print("no data");
             return Center(
               child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.data.docs.toList().length == 0) {
+            return Center(
+              child: Text("No data Found"),
             );
           } else {
             return ListView(

@@ -25,18 +25,26 @@ class DataBase {
     });
   }
 
-  Future<void> newUserInitlise(String uid, String mail) {
+  Future<void> newUserInitlise(String uid, String mail) async {
     String name = (mail.split("@"))[0];
-    return user.doc(uid).set({
-      "uid": uid,
-      "name": name,
-      "mail": mail,
-      "ordreCount": 0,
-      "orders": "null",
-      "delivered": "null",
-      "deliveredCount": 0,
-      "address": "null",
-      "image": "null",
-    });
+    await user.doc(uid).set(
+      {
+        "uid": uid,
+        "name": name,
+        "mail": mail,
+        "mobileNumber": "null",
+        "ordreCount": 0,
+        "orders": "null",
+        "delivered": "null",
+        "deliveredCount": 0,
+        "address": "null",
+        "image": "null",
+        "cart": "null",
+        "cartCount": 0,
+        "WishList": "null",
+        "WishListCount": "null",
+      },
+    );
+    print("NEW USER DATABASE INITILIZED");
   }
 }
