@@ -12,15 +12,17 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  final _searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar: CustomAppBar(_searchController),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('products')
-            .where("name", isGreaterThanOrEqualTo: )
+            .where("nameSearch", isGreaterThanOrEqualTo: _searchController.text)
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.data == null) {

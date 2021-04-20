@@ -5,7 +5,9 @@ import 'package:badges/badges.dart';
 class CustomAppBar extends PreferredSize {
   @override
   final Size preferredSize = Size.fromHeight(70);
-  final _searchController = TextEditingController();
+  final TextEditingController _searchController;
+
+  CustomAppBar(this._searchController);
 
   @override
   Widget build(BuildContext context) => SafeArea(
@@ -17,27 +19,39 @@ class CustomAppBar extends PreferredSize {
               vertical: 10,
             ),
             height: 100,
-            child: Container(
-              width: getProportionateScreenWidth(260),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.amber, width: 2),
-                borderRadius: BorderRadius.circular(25),
-              ),
-              child: TextField(
-                onSubmitted: (String value) {
-                  print("submitted");
-                  print(value);
-                },
-                textInputAction: TextInputAction.go,
-                style: Theme.of(context).textTheme.headline6,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  prefixIcon: Icon(
-                    Icons.search_outlined,
-                    color: Colors.amber,
+            child: Row(
+              children: [
+                IconButton(
+                    icon: Icon(Icons.arrow_back_ios),
+                    onPressed: () {
+                      if (Navigator.canPop(context)) {
+                        Navigator.pop(context);
+                      }
+                    }),
+                Container(
+                  width: getProportionateScreenWidth(290),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.amber, width: 2),
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  child: TextField(
+                    controller: _searchController,
+                    onSubmitted: (String value) {
+                      _searchController.text = value.toLowerCase();
+                      print(_searchController.text);
+                    },
+                    textInputAction: TextInputAction.go,
+                    style: Theme.of(context).textTheme.headline6,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      prefixIcon: Icon(
+                        Icons.search_outlined,
+                        color: Colors.amber,
+                      ),
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
           ),
         ),
