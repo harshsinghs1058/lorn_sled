@@ -73,7 +73,11 @@ class _CartPageState extends State<CartPage> {
           color: Colors.black,
           size: 22,
         ),
-        onPressed: () {},
+        onPressed: () {
+          if (Navigator.canPop(context)) {
+            Navigator.pop(context);
+          }
+        },
       ),
     );
   }

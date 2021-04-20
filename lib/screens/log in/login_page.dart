@@ -4,7 +4,6 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:lorn_sled/constants/loading.dart';
 import 'package:lorn_sled/constants/sizeConfigure.dart';
 import 'package:lorn_sled/screens/cart/cartPage.dart';
-import 'package:lorn_sled/screens/home%20page/homePage.dart';
 import 'package:lorn_sled/screens/log%20in/background.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:lorn_sled/services/auth.dart';

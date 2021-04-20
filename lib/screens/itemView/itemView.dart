@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:lorn_sled/constants/sizeConfigure.dart';
 import 'package:lorn_sled/screens/itemImageViewer/itemImageView.dart';
 
@@ -9,9 +10,10 @@ int _index = 0;
 class ItemView extends StatefulWidget {
   final List description;
   final List image;
-  final double rating;
+  final String rating;
   final int mrp;
   final int sCost;
+  final int ratingCount;
   final String name;
   final discount;
   ItemView({
@@ -22,6 +24,7 @@ class ItemView extends StatefulWidget {
     @required this.sCost,
     @required this.name,
     @required this.discount,
+    @required this.ratingCount,
   });
   @override
   _ItemViewState createState() => _ItemViewState();
@@ -46,6 +49,94 @@ class _ItemViewState extends State<ItemView> {
               _buildDotsForPageView(),
               _buildPriceDetails(context),
               _buildDescription(),
+              Divider(),
+              Container(
+                width: double.infinity,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Rate Product : ",
+                          style: TextStyle(fontSize: 26),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              widget.rating,
+                              style: TextStyle(fontSize: 40),
+                            ),
+                            Icon(
+                              Icons.star,
+                              size: 40,
+                            ),
+                          ],
+                        ),
+                        Text(
+                          "${widget.ratingCount} Rating's",
+                          style: TextStyle(
+                            fontSize: 22,
+                            color: Colors.grey.shade700,
+                          ),
+                        ),
+                      ],
+                    ),
+                    InkWell(
+                      onTap: () {
+                        print("add rating");
+                        // showDialog(
+                        //   child: RatingBar.builder(
+                        //     initialRating: 3,
+                        //     minRating: 1,
+                        //     direction: Axis.horizontal,
+                        //     allowHalfRating: true,
+                        //     itemCount: 5,
+                        //     itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                        //     itemBuilder: (context, _) => Icon(
+                        //       Icons.star,
+                        //       color: Colors.amber,
+                        //     ),
+                        //     onRatingUpdate: (rating) {
+                        //       print(rating);
+                        //     },
+                        //   ),
+                        // );
+                      },
+                      child: Material(
+                        borderRadius: BorderRadius.circular(10.0),
+                        elevation: 10,
+                        shadowColor: Color(0xFFFF8C3B),
+                        child: Container(
+                          height: 45,
+                          width: 100,
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(10.0),
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "Rate",
+                              style: TextStyle(
+                                fontSize: 26,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 100,
+              )
             ],
           ),
         ),
@@ -177,7 +268,7 @@ class _ItemViewState extends State<ItemView> {
       actions: [
         Center(
           child: Text(
-            (widget.rating).toString() + " ",
+            (widget.rating == "null" ? 0 : widget.rating).toString() + " ",
             style: TextStyle(
               fontSize: 20,
             ),

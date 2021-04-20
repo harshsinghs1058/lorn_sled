@@ -68,6 +68,7 @@ class _CategoryState extends State<Category> {
                                     discount: discount,
                                     name: name,
                                     rating: document["rating"],
+                                    ratingCount: document["ratingCount"],
                                     mrp: mrp,
                                     sCost: cost,
                                     image: images,

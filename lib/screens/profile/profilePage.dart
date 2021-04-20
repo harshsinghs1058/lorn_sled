@@ -32,11 +32,13 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       leading: TextButton(
         child: Icon(
-          Icons.arrow_back_ios,
+          Icons.cancel,
           color: Colors.black,
-          size: 22,
+          size: 28,
         ),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pop(context);
+        },
       ),
     );
   }

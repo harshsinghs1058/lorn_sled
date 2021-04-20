@@ -2,9 +2,7 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:lorn_sled/constants/sizeConfigure.dart';
 import 'package:lorn_sled/screens/itemView/itemView.dart';
-import 'section_title.dart';
 
 class PopularProducts extends StatelessWidget {
   Container _productName(
@@ -116,7 +114,8 @@ class PopularProducts extends StatelessWidget {
                                         json.decode(document["description"]),
                                     discount: discount,
                                     name: name,
-                                    rating: document["rating"],
+                                    rating: (document["rating"]).toString(),
+                                    ratingCount: (document["rating"]),
                                     mrp: mrp,
                                     sCost: cost,
                                     image: images,

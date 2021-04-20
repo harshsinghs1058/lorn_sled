@@ -52,8 +52,8 @@ class SearchBar extends PreferredSize {
                         fontSize: 20,
                       ),
                   decoration: InputDecoration.collapsed(
-                    hintText: "Search...",
-                  ),
+                      hintText: "Search...",
+                      hintStyle: TextStyle(color: Colors.black)),
                 ),
               ),
               Spacer(),

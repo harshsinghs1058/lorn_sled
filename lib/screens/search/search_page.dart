@@ -2,28 +2,39 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lorn_sled/constants/sizeConfigure.dart';
-import 'package:lorn_sled/screens/home%20page/customAppBar.dart';
 import 'package:lorn_sled/screens/itemView/itemView.dart';
 
-class HomePage extends StatefulWidget {
+import 'customAppBar.dart';
+
+class SearchPage extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _SearchPageState createState() => _SearchPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
       appBar: CustomAppBar(),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('products').snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('products')
+            .where("name", isGreaterThanOrEqualTo: )
+            .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.data == null ||
-              snapshot.data.docs.toList().length == 0) {
-            print("no data");
+          if (snapshot.data == null) {
+            print("loading");
             return Center(
               child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.data.docs.toList().length == 0) {
+            print("no data");
+            return Center(
+              child: Text(
+                "NO result found",
+                style: TextStyle(fontSize: 40),
+              ),
             );
           } else {
             return ListView(
@@ -50,7 +61,8 @@ class _HomePageState extends State<HomePage> {
                                         json.decode(document["description"]),
                                     discount: discount,
                                     name: name,
-                                    rating: document["rating"],
+                                    rating: document["rating"].toString(),
+                                    ratingCount: document["ratingCount"],
                                     mrp: mrp,
                                     sCost: cost,
                                     image: images,
