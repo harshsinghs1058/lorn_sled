@@ -79,9 +79,11 @@ class PopularProducts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100,
       child: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('products').snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('products')
+            .orderBy("rating")
+            .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.data == null ||
               snapshot.data.docs.toList().length == 0) {
@@ -91,6 +93,8 @@ class PopularProducts extends StatelessWidget {
             );
           } else {
             return ListView(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
               children: snapshot.data.docs.map(
                 (document) {
                   List images = json.decode(document["image"]);
