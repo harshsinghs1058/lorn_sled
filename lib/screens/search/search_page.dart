@@ -59,6 +59,7 @@ class _SearchPageState extends State<SearchPage> {
                               MaterialPageRoute(
                                 builder: (context) => Center(
                                   child: ItemView(
+                                    document: document,
                                     description:
                                         json.decode(document["description"]),
                                     discount: discount,

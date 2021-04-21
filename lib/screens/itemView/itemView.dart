@@ -1,7 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:lorn_sled/constants/sizeConfigure.dart';
+import 'package:lorn_sled/screens/cart/cartPage.dart';
 import 'package:lorn_sled/screens/itemImageViewer/itemImageView.dart';
+import 'package:lorn_sled/main.dart';
+import 'package:toast/toast.dart';
 
 //imported variables
 //program variables
@@ -16,6 +20,8 @@ class ItemView extends StatefulWidget {
   final int ratingCount;
   final String name;
   final discount;
+  final document;
+  final cartView;
   ItemView({
     @required this.description,
     @required this.image,
@@ -25,6 +31,8 @@ class ItemView extends StatefulWidget {
     @required this.name,
     @required this.discount,
     @required this.ratingCount,
+    @required this.document,
+    this.cartView = true,
   });
   @override
   _ItemViewState createState() => _ItemViewState();
@@ -32,113 +40,117 @@ class ItemView extends StatefulWidget {
 
 class _ItemViewState extends State<ItemView> {
   @override
+  void initState() {
+    super.initState();
+    _index = 0;
+  }
+
+  @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: _buildAppBar(context),
-        bottomNavigationBar: _buildBottomAppBar(),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: getProportionateScreenHeight(20),
-              ),
-              _buildImageView(),
-              _buildDotsForPageView(),
-              _buildPriceDetails(context),
-              _buildDescription(),
-              Divider(),
-              Container(
-                width: double.infinity,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Rate Product : ",
-                          style: TextStyle(fontSize: 26),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: _buildAppBar(context),
+      bottomNavigationBar: _buildBottomAppBar(widget.document, widget.cartView),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              height: getProportionateScreenHeight(20),
+            ),
+            _buildImageView(),
+            _buildDotsForPageView(),
+            _buildPriceDetails(context),
+            _buildDescription(),
+            Divider(),
+            Container(
+              width: double.infinity,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Rate Product : ",
+                        style: TextStyle(fontSize: 26),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            widget.rating,
+                            style: TextStyle(fontSize: 40),
+                          ),
+                          Icon(
+                            Icons.star,
+                            size: 40,
+                          ),
+                        ],
+                      ),
+                      Text(
+                        "${widget.ratingCount} Rating's",
+                        style: TextStyle(
+                          fontSize: 22,
+                          color: Colors.grey.shade700,
                         ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              widget.rating,
-                              style: TextStyle(fontSize: 40),
-                            ),
-                            Icon(
-                              Icons.star,
-                              size: 40,
-                            ),
-                          ],
-                        ),
-                        Text(
-                          "${widget.ratingCount} Rating's",
-                          style: TextStyle(
-                            fontSize: 22,
-                            color: Colors.grey.shade700,
+                      ),
+                    ],
+                  ),
+                  InkWell(
+                    onTap: () {
+                      print("add rating");
+                      // showDialog(
+                      //   child: RatingBar.builder(
+                      //     initialRating: 3,
+                      //     minRating: 1,
+                      //     direction: Axis.horizontal,
+                      //     allowHalfRating: true,
+                      //     itemCount: 5,
+                      //     itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                      //     itemBuilder: (context, _) => Icon(
+                      //       Icons.star,
+                      //       color: Colors.amber,
+                      //     ),
+                      //     onRatingUpdate: (rating) {
+                      //       print(rating);
+                      //     },
+                      //   ),
+                      // );
+                    },
+                    child: Material(
+                      borderRadius: BorderRadius.circular(10.0),
+                      elevation: 10,
+                      shadowColor: Color(0xFFFF8C3B),
+                      child: Container(
+                        height: 45,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(10.0),
                           ),
                         ),
-                      ],
-                    ),
-                    InkWell(
-                      onTap: () {
-                        print("add rating");
-                        // showDialog(
-                        //   child: RatingBar.builder(
-                        //     initialRating: 3,
-                        //     minRating: 1,
-                        //     direction: Axis.horizontal,
-                        //     allowHalfRating: true,
-                        //     itemCount: 5,
-                        //     itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                        //     itemBuilder: (context, _) => Icon(
-                        //       Icons.star,
-                        //       color: Colors.amber,
-                        //     ),
-                        //     onRatingUpdate: (rating) {
-                        //       print(rating);
-                        //     },
-                        //   ),
-                        // );
-                      },
-                      child: Material(
-                        borderRadius: BorderRadius.circular(10.0),
-                        elevation: 10,
-                        shadowColor: Color(0xFFFF8C3B),
-                        child: Container(
-                          height: 45,
-                          width: 100,
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(10.0),
-                            ),
-                          ),
-                          child: Center(
-                            child: Text(
-                              "Rate",
-                              style: TextStyle(
-                                fontSize: 26,
-                              ),
+                        child: Center(
+                          child: Text(
+                            "Rate",
+                            style: TextStyle(
+                              fontSize: 26,
                             ),
                           ),
                         ),
                       ),
-                    )
-                  ],
-                ),
+                    ),
+                  )
+                ],
               ),
-              SizedBox(
-                height: 100,
-              )
-            ],
-          ),
+            ),
+            SizedBox(
+              height: 100,
+            )
+          ],
         ),
       ),
     );
@@ -256,10 +268,11 @@ class _ItemViewState extends State<ItemView> {
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
       elevation: 10,
-      backgroundColor: Colors.black,
+      backgroundColor: Color.fromARGB(255, 250, 250, 250),
       leading: IconButton(
         icon: Icon(
           Icons.arrow_back_ios,
+          color: Colors.black,
         ),
         onPressed: () {
           Navigator.pop(context);
@@ -268,14 +281,15 @@ class _ItemViewState extends State<ItemView> {
       actions: [
         Center(
           child: Text(
-            (widget.rating == "null" ? 0 : widget.rating).toString() + " ",
+            (widget.rating).toString() + " ",
             style: TextStyle(
-              fontSize: 20,
+              fontSize: 26,
+              color: Colors.black,
             ),
           ),
         ),
         SizedBox(
-          width: 20,
+          width: 26,
           child: Image.asset(
             "icons/star.jpg",
           ),
@@ -287,13 +301,14 @@ class _ItemViewState extends State<ItemView> {
     );
   }
 
-  BottomAppBar _buildBottomAppBar() {
+  BottomAppBar _buildBottomAppBar(document, bool showCart) {
     return BottomAppBar(
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Flexible(
             child: Container(
+              color: Colors.yellow,
               height: 50,
               child: Center(
                 child: Text(
@@ -306,21 +321,48 @@ class _ItemViewState extends State<ItemView> {
               ),
             ),
           ),
-          Flexible(
-            child: Container(
-              height: 50,
-              color: Colors.yellow,
-              child: Center(
-                child: Text(
-                  "Add to Cart",
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w500,
+          if (showCart)
+            Flexible(
+              child: InkWell(
+                onTap: () async {
+                  await FirebaseFirestore.instance
+                      .collection('cart')
+                      .doc("userUid")
+                      .collection("products")
+                      .doc(document["name"])
+                      .set({
+                    "name": document["name"],
+                    "category": document["category"],
+                    "cost": document["cost"],
+                    "count": document["count"],
+                    "description": document["description"],
+                    "discount": document["discount"],
+                    "image": document["image"],
+                    "mrp": document["mrp"],
+                    "nameSearch": document["nameSearch"],
+                    "rating": document["rating"],
+                    "ratingCount": document["ratingCount"],
+                  });
+                  Toast.show("Product added to cart", context);
+
+                  print("Product added to firebase");
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => CartPage()));
+                },
+                child: Container(
+                  height: 50,
+                  child: Center(
+                    child: Text(
+                      "Add to Cart",
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
         ],
       ),
     );

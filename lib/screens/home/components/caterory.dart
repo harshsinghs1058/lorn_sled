@@ -63,6 +63,7 @@ class _CategoryState extends State<Category> {
                               MaterialPageRoute(
                                 builder: (context) => Center(
                                   child: ItemView(
+                                    document: document,
                                     description:
                                         json.decode(document["description"]),
                                     discount: discount,

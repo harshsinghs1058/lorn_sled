@@ -38,12 +38,14 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        toolbarHeight: 70,
         elevation: 0,
+        backgroundColor: Color.fromARGB(255, 250, 250, 250),
         leading: Padding(
           padding: EdgeInsets.only(
-              top: getProportionateScreenHeight(10),
-              left: getProportionateScreenHeight(10)),
+            top: getProportionateScreenHeight(10),
+            left: getProportionateScreenHeight(10),
+          ),
           child: IconBtnWithCounter(
             press: () {
               scaffoldKey.currentState.openDrawer();
@@ -60,13 +62,14 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           Padding(
             padding: EdgeInsets.only(
-                right: getProportionateScreenHeight(10),
-                left: getProportionateScreenHeight(10),
-                top: getProportionateScreenHeight(10)),
+              right: getProportionateScreenHeight(10),
+              left: getProportionateScreenHeight(10),
+              top: getProportionateScreenHeight(10),
+              bottom: getProportionateScreenHeight(10),
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // SearchField(),
                 SizedBox(
                   width: 5,
                 ),
@@ -81,6 +84,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   },
                 ),
+                SizedBox(
+                  width: 5,
+                ),
                 IconBtnWithCounter(
                   svgSrc: "icons/Cart Icon.svg",
                   press: () {
@@ -92,10 +98,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   },
                 ),
+                SizedBox(
+                  width: 5,
+                ),
                 IconBtnWithCounter(
                   svgSrc: "icons/Bell.svg",
                   numOfitem: 3,
                   press: () {},
+                ),
+                SizedBox(
+                  width: 5,
                 ),
               ],
             ),

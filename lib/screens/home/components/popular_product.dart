@@ -123,6 +123,7 @@ class PopularProducts extends StatelessWidget {
                                     mrp: mrp,
                                     sCost: cost,
                                     image: images,
+                                    document: document,
                                   ),
                                 ),
                               ),

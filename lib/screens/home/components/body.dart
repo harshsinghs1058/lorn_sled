@@ -12,11 +12,24 @@ class Body extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: getProportionateScreenWidth(10)),
             DiscountBanner(),
             Categories(),
             SpecialOffers(),
-            SizedBox(height: getProportionateScreenWidth(30)),
+            SizedBox(height: getProportionateScreenWidth(10)),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: getProportionateScreenWidth(20)),
+              child: SizedBox(
+                width: double.infinity,
+                child: Text(
+                  "Special for you",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: getProportionateScreenWidth(18),
+                  ),
+                ),
+              ),
+            ),
             PopularProducts(),
             // SizedBox(height: getProportionateScreenWidth(30)),
           ],
