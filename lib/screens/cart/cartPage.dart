@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:lorn_sled/constants/sizeConfigure.dart';
-import 'package:lorn_sled/screens/cart/cartBody.dart';
 import 'package:lorn_sled/screens/itemView/itemView.dart';
 import 'package:lorn_sled/main.dart';
 
@@ -13,77 +13,14 @@ class CartPage extends StatefulWidget {
 }
 
 bool showBottonNavigatorBar = true;
+int total = 0;
+Set<String> temp = {};
 
 class _CartPageState extends State<CartPage> {
-  Container _productName(
-      BuildContext context, String name, cost, mrp, discount) {
-    return Container(
-      height: 100,
-      width: MediaQuery.of(context).size.width - 180,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            name,
-            maxLines: 2,
-            style: Theme.of(context)
-                .textTheme
-                .bodyText1
-                .copyWith(fontSize: 18, color: Colors.black),
-          ),
-          Text(
-            "Rs. " + cost.toString(),
-            style: Theme.of(context).textTheme.bodyText1.copyWith(
-                  fontSize: 18,
-                  color: Colors.redAccent,
-                ),
-          ),
-          RichText(
-            text: TextSpan(
-              text: "Rs. " + mrp.toString(),
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.black,
-                decoration: TextDecoration.lineThrough,
-              ),
-              children: [
-                TextSpan(
-                  text: "  " + discount.toString() + "% off",
-                  style: TextStyle(
-                    decoration: TextDecoration.none,
-                    color: Colors.green[600],
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Container _productImage(List images) {
-    return Container(
-      height: 100,
-      width: 100,
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black, width: 2),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      padding: EdgeInsets.all(5),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(10),
-        child: Image.network(images[0],
-            errorBuilder: (context, error, stackTrace) {
-          print(error);
-          return Center(
-            child: Text("Image unavilable"),
-          );
-        }),
-      ),
-    );
+  @override
+  void initState() {
+    super.initState();
+    total = 0;
   }
 
   @override
@@ -105,9 +42,6 @@ class _CartPageState extends State<CartPage> {
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.data.docs.toList().length == 0) {
-            setState(() {
-              showBottonNavigatorBar = false;
-            });
             return Center(
               child: Text(
                 "CART IS EMPTY",
@@ -120,8 +54,12 @@ class _CartPageState extends State<CartPage> {
               shrinkWrap: true,
               children: snapshot.data.docs.map(
                 (document) {
+                  if (!temp.contains(document["name"]))
+                    total += int.parse(document["cost"].toString());
+                  temp.add(document["name"]);
+                  print(total);
                   List images = json.decode(document["image"]);
-                  String name = "document";
+                  String name = document["name"];
                   var cost = document["cost"];
                   var mrp = document["mrp"];
                   var discount = document["discount"];
@@ -161,12 +99,85 @@ class _CartPageState extends State<CartPage> {
                                 SizedBox(
                                   width: 10,
                                 ),
-                                _productImage(images),
+                                Container(
+                                  height: 100,
+                                  width: 100,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Colors.black, width: 2),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  padding: EdgeInsets.all(5),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Image.network(images[0],
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
+                                      print(error);
+                                      return Center(
+                                        child: Text("Image unavilable"),
+                                      );
+                                    }),
+                                  ),
+                                ),
                                 SizedBox(
                                   width: 20,
                                 ),
-                                _productName(
-                                    context, name, cost, mrp, discount),
+                                Container(
+                                  height: 100,
+                                  width:
+                                      MediaQuery.of(context).size.width - 180,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        name,
+                                        maxLines: 2,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            .copyWith(
+                                                fontSize: 18,
+                                                color: Colors.black),
+                                      ),
+                                      Text(
+                                        "Rs. " + cost.toString(),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            .copyWith(
+                                              fontSize: 18,
+                                              color: Colors.redAccent,
+                                            ),
+                                      ),
+                                      RichText(
+                                        text: TextSpan(
+                                          text: "Rs. " + mrp.toString(),
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.black,
+                                            decoration:
+                                                TextDecoration.lineThrough,
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                              text: "  " +
+                                                  discount.toString() +
+                                                  "% off",
+                                              style: TextStyle(
+                                                decoration: TextDecoration.none,
+                                                color: Colors.green[600],
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -188,45 +199,42 @@ class _CartPageState extends State<CartPage> {
   }
 
   BottomAppBar buildBottomAppBar(BuildContext context) {
-    if (showBottonNavigatorBar)
-      return BottomAppBar(
-        child: Container(
-          height: 55,
-          child: Row(
-            children: [
-              Container(
-                color: Color(0xff6386f7),
+    return BottomAppBar(
+      child: Container(
+        height: 55,
+        child: Row(
+          children: [
+            Container(
+              color: Color(0xff6386f7),
+              width: MediaQuery.of(context).size.width / 2,
+              child: Center(
+                child: Text(
+                  "Total Rs. " + total.toString(),
+                  style: Theme.of(context).textTheme.bodyText1.copyWith(
+                        fontSize: 22,
+                      ),
+                ),
+              ),
+            ),
+            InkWell(
+              onTap: () {},
+              child: Container(
+                color: Color(0xff57cf73),
                 width: MediaQuery.of(context).size.width / 2,
                 child: Center(
                   child: Text(
-                    "Total Rs. 35999",
+                    "Buy Now",
                     style: Theme.of(context).textTheme.bodyText1.copyWith(
                           fontSize: 22,
                         ),
                   ),
                 ),
               ),
-              InkWell(
-                onTap: () {},
-                child: Container(
-                  color: Color(0xff57cf73),
-                  width: MediaQuery.of(context).size.width / 2,
-                  child: Center(
-                    child: Text(
-                      "Buy Now",
-                      style: Theme.of(context).textTheme.bodyText1.copyWith(
-                            fontSize: 22,
-                          ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
-      );
-    else
-      return BottomAppBar();
+      ),
+    );
   }
 
   AppBar customCartPageAppBar(BuildContext context) {

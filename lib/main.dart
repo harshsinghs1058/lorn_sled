@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:lorn_sled/screens/home/home_screen.dart';
+import 'package:lorn_sled/screens/wrapper/wrapper.dart';
 
 var userUid;
 Future<void> main() async {
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomeScreen(),
+      home: Wrapper(),
       debugShowCheckedModeBanner: false,
       title: "Lorn Sled",
     );
