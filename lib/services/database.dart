@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:lorn_sled/imp_fucntion.dart';
 
 class DataBase {
   final product = FirebaseFirestore.instance.collection('products');
@@ -39,8 +38,6 @@ class DataBase {
         "deliveredCount": 0,
         "address": "null",
         "image": "null",
-        "cart": "null",
-        "cartCount": 0,
         "WishList": "null",
         "WishListCount": "null",
       },

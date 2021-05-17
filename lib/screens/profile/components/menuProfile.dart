@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lorn_sled/screens/profile/components/profile_menu_button.dart';
+import 'package:lorn_sled/screens/wishlist_page/wishList.dart';
+import 'package:lorn_sled/screens/wrapper/wrapper.dart';
+import "package:lorn_sled/services/auth.dart";
 
 class ProfileMenu extends StatefulWidget {
   @override
@@ -18,10 +21,14 @@ class _ProfileMenuState extends State<ProfileMenu> {
               text: "My Account",
               fun: () {}),
           ProfileMenuButton(
-              context: context,
-              svgPath: "icons/Heart Icon.svg",
-              text: "Wish List",
-              fun: () {}),
+            context: context,
+            svgPath: "icons/Heart Icon.svg",
+            text: "Wish List",
+            fun: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => WishList()));
+            },
+          ),
           ProfileMenuButton(
               context: context,
               svgPath: "icons/Settings.svg",
@@ -36,7 +43,11 @@ class _ProfileMenuState extends State<ProfileMenu> {
               context: context,
               svgPath: "icons/Log out.svg",
               text: "Log out",
-              fun: () {}),
+              fun: () {
+                Auth().signOut();
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => Wrapper()));
+              }),
         ],
       ),
     );

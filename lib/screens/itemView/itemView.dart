@@ -2,7 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:lorn_sled/constants/sizeConfigure.dart';
-import 'package:lorn_sled/screens/cart/cartPage.dart';
+import 'package:lorn_sled/screens/orders/order_page.dart';
+import 'package:lorn_sled/screens/wishlist_page/wishList.dart';
 import 'package:lorn_sled/screens/itemImageViewer/itemImageView.dart';
 import 'package:lorn_sled/main.dart';
 import 'package:toast/toast.dart';
@@ -307,15 +308,43 @@ class _ItemViewState extends State<ItemView> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Flexible(
-            child: Container(
-              color: Colors.yellow,
-              height: 50,
-              child: Center(
-                child: Text(
-                  "Buy Now",
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w500,
+            child: InkWell(
+              onTap: () async {
+                await FirebaseFirestore.instance
+                    .collection('orders')
+                    .doc(userUid)
+                    .collection("products")
+                    .doc(document["name"])
+                    .set({
+                  "name": document["name"],
+                  "category": document["category"],
+                  "cost": document["cost"],
+                  "count": document["count"],
+                  "description": document["description"],
+                  "discount": document["discount"],
+                  "image": document["image"],
+                  "mrp": document["mrp"],
+                  "nameSearch": document["nameSearch"],
+                  "rating": document["rating"],
+                  "ratingCount": document["ratingCount"],
+                  "time": DateTime.now(),
+                });
+                Toast.show("Product added to WishList", context);
+
+                print("Product added to firebase");
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => OrderPage()));
+              },
+              child: Container(
+                color: Colors.yellow,
+                height: 50,
+                child: Center(
+                  child: Text(
+                    "Buy Now",
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
               ),
@@ -326,8 +355,8 @@ class _ItemViewState extends State<ItemView> {
               child: InkWell(
                 onTap: () async {
                   await FirebaseFirestore.instance
-                      .collection('cart')
-                      .doc("userUid")
+                      .collection('wishlist')
+                      .doc(userUid)
                       .collection("products")
                       .doc(document["name"])
                       .set({
@@ -343,17 +372,17 @@ class _ItemViewState extends State<ItemView> {
                     "rating": document["rating"],
                     "ratingCount": document["ratingCount"],
                   });
-                  Toast.show("Product added to cart", context);
+                  Toast.show("Product added to WishList", context);
 
                   print("Product added to firebase");
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => CartPage()));
+                      MaterialPageRoute(builder: (context) => WishList()));
                 },
                 child: Container(
                   height: 50,
                   child: Center(
                     child: Text(
-                      "Add to Cart",
+                      "Add to WishList",
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w500,

@@ -1,22 +1,20 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:lorn_sled/constants/sizeConfigure.dart';
 import 'package:lorn_sled/screens/itemView/itemView.dart';
 import 'package:lorn_sled/main.dart';
 
-class CartPage extends StatefulWidget {
+class WishList extends StatefulWidget {
   @override
-  _CartPageState createState() => _CartPageState();
+  _WishListState createState() => _WishListState();
 }
 
 bool showBottonNavigatorBar = true;
 int total = 0;
 Set<String> temp = {};
 
-class _CartPageState extends State<CartPage> {
+class _WishListState extends State<WishList> {
   @override
   void initState() {
     super.initState();
@@ -27,12 +25,12 @@ class _CartPageState extends State<CartPage> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      appBar: customCartPageAppBar(context),
+      appBar: customWishlistPageAppBar(context),
       backgroundColor: Colors.white,
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
-            .collection('cart')
-            .doc("userUid")
+            .collection('wishlist')
+            .doc(userUid)
             .collection("products")
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -44,7 +42,7 @@ class _CartPageState extends State<CartPage> {
           } else if (snapshot.data.docs.toList().length == 0) {
             return Center(
               child: Text(
-                "CART IS EMPTY",
+                "WishList Is Empty",
                 style: TextStyle(fontSize: 30),
               ),
             );
@@ -194,56 +192,16 @@ class _CartPageState extends State<CartPage> {
           }
         },
       ),
-      bottomNavigationBar: buildBottomAppBar(context),
     );
   }
 
-  BottomAppBar buildBottomAppBar(BuildContext context) {
-    return BottomAppBar(
-      child: Container(
-        height: 55,
-        child: Row(
-          children: [
-            Container(
-              color: Color(0xff6386f7),
-              width: MediaQuery.of(context).size.width / 2,
-              child: Center(
-                child: Text(
-                  "Total Rs. " + total.toString(),
-                  style: Theme.of(context).textTheme.bodyText1.copyWith(
-                        fontSize: 22,
-                      ),
-                ),
-              ),
-            ),
-            InkWell(
-              onTap: () {},
-              child: Container(
-                color: Color(0xff57cf73),
-                width: MediaQuery.of(context).size.width / 2,
-                child: Center(
-                  child: Text(
-                    "Buy Now",
-                    style: Theme.of(context).textTheme.bodyText1.copyWith(
-                          fontSize: 22,
-                        ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  AppBar customCartPageAppBar(BuildContext context) {
+  AppBar customWishlistPageAppBar(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.white,
       elevation: 10,
       centerTitle: true,
       title: Text(
-        "My Cart",
+        "My WishList",
         style: Theme.of(context).textTheme.bodyText1.copyWith(fontSize: 22),
       ),
       leading: TextButton(

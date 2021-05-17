@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lorn_sled/constants/color.dart';
 import 'package:lorn_sled/constants/sizeConfigure.dart';
-import 'package:lorn_sled/screens/cart/cartPage.dart';
+import 'package:lorn_sled/screens/orders/order_page.dart';
+import 'package:lorn_sled/screens/wishlist_page/wishList.dart';
 import 'package:lorn_sled/screens/profile/components/menuProfile.dart';
 import 'package:lorn_sled/screens/profile/components/profilePic.dart';
 import 'package:lorn_sled/screens/search/search_page.dart';
@@ -15,6 +16,65 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   var scaffoldKey = GlobalKey<ScaffoldState>();
+  final _formKey = GlobalKey<FormState>();
+  final _textEditingController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    temp();
+  }
+
+  Future<void> temp() async {
+    showDialog(
+        context: context,
+        builder: (context) {
+          bool isChecked = false;
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+              content: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextFormField(
+                        controller: _textEditingController,
+                        validator: (value) {
+                          return value.isNotEmpty ? null : "Enter any text";
+                        },
+                        decoration:
+                            InputDecoration(hintText: "Please Enter Text"),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Choice Box"),
+                          Checkbox(
+                              value: isChecked,
+                              onChanged: (checked) {
+                                setState(() {
+                                  isChecked = checked;
+                                });
+                              })
+                        ],
+                      )
+                    ],
+                  )),
+              title: Text('Stateful Dialog'),
+              actions: <Widget>[
+                InkWell(
+                  child: Text('OK   '),
+                  onTap: () {
+                    if (_formKey.currentState.validate()) {
+                      // Do something like updating SharedPreferences or User Settings etc.
+                      Navigator.of(context).pop();
+                    }
+                  },
+                ),
+              ],
+            );
+          });
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => CartPage(),
+                        builder: (context) => OrderPage(),
                       ),
                     );
                   },

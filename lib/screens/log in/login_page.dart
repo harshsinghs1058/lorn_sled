@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:lorn_sled/constants/loading.dart';
 import 'package:lorn_sled/constants/sizeConfigure.dart';
-import 'package:lorn_sled/screens/cart/cartPage.dart';
+import 'package:lorn_sled/screens/home/home_screen.dart';
 import 'package:lorn_sled/screens/log%20in/background.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:lorn_sled/services/auth.dart';
@@ -81,7 +81,7 @@ class _State extends State<LogInPage> {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => CartPage(),
+                                  builder: (context) => HomeScreen(),
                                 ),
                               );
                             })
@@ -92,11 +92,13 @@ class _State extends State<LogInPage> {
                         error = error.replaceAll("-", " ");
                         print(error);
                         AwesomeDialog(
-                          context: context,
-                          dialogType: DialogType.ERROR,
-                          title: "Error",
-                          desc: error,
-                        )..show();
+                            context: context,
+                            dialogType: DialogType.ERROR,
+                            title: "Error",
+                            desc: error,
+                            btnOkText: "ok",
+                            btnOkOnPress: () {})
+                          ..show();
                       }
                     }
                   },

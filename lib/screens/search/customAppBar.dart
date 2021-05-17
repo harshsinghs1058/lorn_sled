@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lorn_sled/constants/sizeConfigure.dart';
-import 'package:badges/badges.dart';
 
 class CustomAppBar extends PreferredSize {
   @override
