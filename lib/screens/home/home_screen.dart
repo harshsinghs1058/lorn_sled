@@ -161,14 +161,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 SizedBox(
                   width: 5,
                 ),
-                IconBtnWithCounter(
-                  svgSrc: "icons/Bell.svg",
-                  numOfitem: 3,
-                  press: () {},
-                ),
-                SizedBox(
-                  width: 5,
-                ),
+                // IconBtnWithCounter(
+                //   svgSrc: "icons/Bell.svg",
+                //   numOfitem: 3,
+                //   press: () {},
+                // ),
+                // SizedBox(
+                //   width: 5,
+                // ),
               ],
             ),
           ),

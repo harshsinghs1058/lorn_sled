@@ -23,6 +23,7 @@ class ItemView extends StatefulWidget {
   final discount;
   final document;
   final cartView;
+  final bool order;
   ItemView({
     @required this.description,
     @required this.image,
@@ -34,6 +35,7 @@ class ItemView extends StatefulWidget {
     @required this.ratingCount,
     @required this.document,
     this.cartView = true,
+    this.order = false,
   });
   @override
   _ItemViewState createState() => _ItemViewState();
@@ -52,7 +54,8 @@ class _ItemViewState extends State<ItemView> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: _buildAppBar(context),
-      bottomNavigationBar: _buildBottomAppBar(widget.document, widget.cartView),
+      bottomNavigationBar:
+          _buildBottomAppBar(widget.document, widget.cartView, widget.order),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -73,24 +76,57 @@ class _ItemViewState extends State<ItemView> {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        "Rate Product : ",
-                        style: TextStyle(fontSize: 26),
-                      ),
+                      Row(children: [
+                        Text(
+                          "Rate Product : ",
+                          style: TextStyle(fontSize: 26),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            print("add rating");
+                          },
+                          child: Material(
+                            borderRadius: BorderRadius.circular(10.0),
+                            elevation: 10,
+                            shadowColor: Color(0xFFFF8C3B),
+                            child: Container(
+                              height: 45,
+                              width: 100,
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(10.0),
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "Rate",
+                                  style: TextStyle(
+                                    fontSize: 26,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                      ]),
                       SizedBox(
                         height: 10,
                       ),
-                      Row(
-                        children: [
-                          Text(
-                            widget.rating,
-                            style: TextStyle(fontSize: 40),
-                          ),
-                          Icon(
-                            Icons.star,
-                            size: 40,
-                          ),
-                        ],
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              widget.rating,
+                              style: TextStyle(fontSize: 40),
+                            ),
+                            Icon(
+                              Icons.star,
+                              size: 40,
+                            ),
+                          ],
+                        ),
                       ),
                       Text(
                         "${widget.ratingCount} Rating's",
@@ -101,55 +137,11 @@ class _ItemViewState extends State<ItemView> {
                       ),
                     ],
                   ),
-                  InkWell(
-                    onTap: () {
-                      print("add rating");
-                      // showDialog(
-                      //   child: RatingBar.builder(
-                      //     initialRating: 3,
-                      //     minRating: 1,
-                      //     direction: Axis.horizontal,
-                      //     allowHalfRating: true,
-                      //     itemCount: 5,
-                      //     itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                      //     itemBuilder: (context, _) => Icon(
-                      //       Icons.star,
-                      //       color: Colors.amber,
-                      //     ),
-                      //     onRatingUpdate: (rating) {
-                      //       print(rating);
-                      //     },
-                      //   ),
-                      // );
-                    },
-                    child: Material(
-                      borderRadius: BorderRadius.circular(10.0),
-                      elevation: 10,
-                      shadowColor: Color(0xFFFF8C3B),
-                      child: Container(
-                        height: 45,
-                        width: 100,
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(10.0),
-                          ),
-                        ),
-                        child: Center(
-                          child: Text(
-                            "Rate",
-                            style: TextStyle(
-                              fontSize: 26,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
                 ],
               ),
             ),
             SizedBox(
-              height: 100,
+              height: 25,
             )
           ],
         ),
@@ -302,60 +294,37 @@ class _ItemViewState extends State<ItemView> {
     );
   }
 
-  BottomAppBar _buildBottomAppBar(document, bool showCart) {
-    return BottomAppBar(
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Flexible(
-            child: InkWell(
-              onTap: () async {
-                await FirebaseFirestore.instance
-                    .collection('orders')
-                    .doc(userUid)
-                    .collection("products")
-                    .doc(document["name"])
-                    .set({
-                  "name": document["name"],
-                  "category": document["category"],
-                  "cost": document["cost"],
-                  "count": document["count"],
-                  "description": document["description"],
-                  "discount": document["discount"],
-                  "image": document["image"],
-                  "mrp": document["mrp"],
-                  "nameSearch": document["nameSearch"],
-                  "rating": document["rating"],
-                  "ratingCount": document["ratingCount"],
-                  "time": DateTime.now(),
-                });
-                Toast.show("Product added to WishList", context);
-
-                print("Product added to firebase");
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => OrderPage()));
-              },
-              child: Container(
-                color: Colors.yellow,
-                height: 50,
-                child: Center(
-                  child: Text(
-                    "Buy Now",
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w500,
-                    ),
+  BottomAppBar _buildBottomAppBar(document, bool showCart, bool isOrder) {
+    if (isOrder) {
+      return BottomAppBar(
+        child: Flexible(
+          child: InkWell(
+            child: Container(
+              color: Colors.yellow,
+              height: 50,
+              child: Center(
+                child: Text(
+                  "Bill",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
             ),
           ),
-          if (showCart)
+        ),
+      );
+    } else
+      return BottomAppBar(
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
             Flexible(
               child: InkWell(
                 onTap: () async {
                   await FirebaseFirestore.instance
-                      .collection('wishlist')
+                      .collection('orders')
                       .doc(userUid)
                       .collection("products")
                       .doc(document["name"])
@@ -371,18 +340,20 @@ class _ItemViewState extends State<ItemView> {
                     "nameSearch": document["nameSearch"],
                     "rating": document["rating"],
                     "ratingCount": document["ratingCount"],
+                    "time": DateTime.now(),
                   });
                   Toast.show("Product added to WishList", context);
 
                   print("Product added to firebase");
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => WishList()));
+                      MaterialPageRoute(builder: (context) => OrderPage()));
                 },
                 child: Container(
+                  color: Colors.yellow,
                   height: 50,
                   child: Center(
                     child: Text(
-                      "Add to WishList",
+                      "Buy Now",
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w500,
@@ -392,9 +363,51 @@ class _ItemViewState extends State<ItemView> {
                 ),
               ),
             ),
-        ],
-      ),
-    );
+            if (showCart)
+              Flexible(
+                child: InkWell(
+                  onTap: () async {
+                    await FirebaseFirestore.instance
+                        .collection('wishlist')
+                        .doc(userUid)
+                        .collection("products")
+                        .doc(document["name"])
+                        .set({
+                      "name": document["name"],
+                      "category": document["category"],
+                      "cost": document["cost"],
+                      "count": document["count"],
+                      "description": document["description"],
+                      "discount": document["discount"],
+                      "image": document["image"],
+                      "mrp": document["mrp"],
+                      "nameSearch": document["nameSearch"],
+                      "rating": document["rating"],
+                      "ratingCount": document["ratingCount"],
+                    });
+                    Toast.show("Product added to WishList", context);
+
+                    print("Product added to firebase");
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => WishList()));
+                  },
+                  child: Container(
+                    height: 50,
+                    child: Center(
+                      child: Text(
+                        "Add to WishList",
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
+      );
   }
 
   Widget _buildDescription() {

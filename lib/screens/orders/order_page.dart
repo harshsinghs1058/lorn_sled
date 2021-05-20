@@ -99,6 +99,7 @@ class _OrderPageState extends State<OrderPage> {
                                     image: images,
                                     document: document,
                                     cartView: false,
+                                    order: true,
                                   ),
                                 ),
                               ),
