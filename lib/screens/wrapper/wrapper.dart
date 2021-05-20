@@ -1,6 +1,5 @@
 import "dart:math";
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lorn_sled/constants/sizeConfigure.dart';
 import 'package:lorn_sled/screens/createAccount/createAccount.dart';
 import 'package:lorn_sled/screens/forget_password/forgetPassword.dart';
@@ -176,7 +175,9 @@ class AnimatedWave extends StatelessWidget {
       return Container(
         height: height,
         width: constraints.biggest.width,
+        // ignore: deprecated_member_use
         child: ControlledAnimation(
+            // ignore: deprecated_member_use
             playback: Playback.LOOP,
             duration: Duration(milliseconds: (5000 / speed).round()),
             tween: Tween(begin: 0.0, end: 2 * pi),
@@ -226,14 +227,19 @@ class CurvePainter extends CustomPainter {
 class AnimatedBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // ignore: deprecated_member_use
     final tween = MultiTrackTween([
+      // ignore: deprecated_member_use
       Track("color1").add(Duration(seconds: 3),
           ColorTween(begin: Color(0xffD38312), end: Colors.lightBlue.shade900)),
+      // ignore: deprecated_member_use
       Track("color2").add(Duration(seconds: 3),
           ColorTween(begin: Color(0xffA83279), end: Colors.blue.shade600))
     ]);
 
+    // ignore: deprecated_member_use
     return ControlledAnimation(
+      // ignore: deprecated_member_use
       playback: Playback.MIRROR,
       tween: tween,
       duration: tween.duration,

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:lorn_sled/constants/color.dart';
 import 'package:lorn_sled/constants/sizeConfigure.dart';
 import 'package:lorn_sled/screens/orders/order_page.dart';
-import 'package:lorn_sled/screens/wishlist_page/wishList.dart';
 import 'package:lorn_sled/screens/profile/components/menuProfile.dart';
 import 'package:lorn_sled/screens/profile/components/profilePic.dart';
 import 'package:lorn_sled/screens/search/search_page.dart';
